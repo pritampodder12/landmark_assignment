@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  
+}
+
+/* li {
+  font-size: 18px;
+  margin-left: 18px;
+  margin-bottom: 6px;
+  list-style-type: circle;
+} */
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
