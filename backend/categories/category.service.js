@@ -5,6 +5,7 @@ module.exports = {
   getSubCategory,
   createCategory,
   updateCategory,
+  deleteCategory
 };
 
 async function getSubCategory(parentId) {
@@ -76,4 +77,17 @@ async function updateCategory(reqBody) {
   Object.assign(category, updatedObj);
 
   await category.save();
+}
+
+async function deleteCategory(id) {
+  if(!id) {
+    throw "categoryId field is required!";
+  }
+  const category = await Category.findById(id);
+  if (!category) {
+    throw "Category ID not found";
+  }
+  await Category.findByIdAndRemove(id);
+
+  await Category.find({parentId: id}).remove();
 }

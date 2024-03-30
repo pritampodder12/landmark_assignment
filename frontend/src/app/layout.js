@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import 'react-pure-modal/dist/react-pure-modal.min.css';
 
 const inter = Inter({ subsets: ["latin"] });
 

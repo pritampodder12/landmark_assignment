@@ -8,13 +8,17 @@ export default function Home() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    fetchData();
+  }, []);
+
+  function fetchData() {
     axios
       .get("http://localhost:4000/categories/getSubCategory")
       .then(({ data }) => {
         setData(data);
       })
       .catch((err) => console.log("err", err));
-  }, []);
+  }
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-slate-200">
