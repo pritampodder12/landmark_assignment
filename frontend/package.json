@@ -13,9 +13,7 @@
     "next": "14.1.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-modal": "^3.16.1",
-    "react-pure-modal": "^2.2.5",
-    "react-responsive-modal": "^6.4.2"
+    "react-pure-modal": "^2.2.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
