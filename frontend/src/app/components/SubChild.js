@@ -64,7 +64,7 @@ export default function SubChild({ id, parentId, hasChild, categoryName }) {
           .finally(() => {
             setLoading(false);
             setModal();
-            // window.location.reload();
+            window.location.reload();
           });
       }
     }
