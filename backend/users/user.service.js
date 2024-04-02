@@ -5,37 +5,24 @@ const db = require('_helpers/db');
 const User = db.User;
 
 module.exports = {
-    // authenticate,
-    getAll,
-    getById,
+    authenticate,
     create,
-    update,
-    delete: _delete,
-    logout,
-    getRecords
+    update
 };
 
-// async function authenticate({ username, password }, ip) {
-//     const user = await User.findOne({ username });
-//     if (user && bcrypt.compareSync(password, user.hash)) {
-//         const { hash, ...userWithoutHash } = user.toObject();
-//         const token = jwt.sign({ sub: user.id }, config.secret);
-//         user.lastLoginDate = new Date().toISOString();
-//         user.clientIp = ip;
-//         await user.save();
-//         return {
-//             ...userWithoutHash,
-//             token
-//         };
-//     }
-// }
-
-async function getAll() {
-    return await User.find().select('-hash');
-}
-
-async function getById(id) {
-    return await User.findById(id).select('-hash');
+async function authenticate({ username, password }, ip) {
+    const user = await User.findOne({ username });
+    if (user && bcrypt.compareSync(password, user.hash)) {
+        const { hash, ...userWithoutHash } = user.toObject();
+        const token = jwt.sign({ sub: user.id }, config.secret);
+        user.lastLoginDate = new Date().toISOString();
+        user.clientIp = ip;
+        await user.save();
+        return {
+            ...userWithoutHash,
+            token
+        };
+    }
 }
 
 async function create(userParam) {
@@ -76,31 +63,4 @@ async function update(id, userParam) {
     Object.assign(user, userParam);
 
     await user.save();
-}
-
-async function _delete(id) {
-    await User.findByIdAndRemove(id);
-}
-
-async function logout(id) {
-    const user = await User.findById(id);
-    if (!user) throw 'User not found';
-
-    let userParam = {
-        lastLogoutDate: new Date().toISOString()
-    }
-
-    Object.assign(user, userParam);
-
-    await user.save();
-}
-
-async function getRecords(id) {
-    const user = await User.findById(id);
-    if (user?.role?.toLowerCase() !== 'auditor') {
-        throw {
-            name: 'PermissionError'
-        }
-    }
-    return await User.find().select();
 }

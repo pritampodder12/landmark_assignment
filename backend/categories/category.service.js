@@ -5,7 +5,7 @@ module.exports = {
   getSubCategory,
   createCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
 };
 
 async function getSubCategory(parentId) {
@@ -20,9 +20,9 @@ async function createCategory(reqBody) {
     throw "categoryName field is required!";
   }
 
-//   if (await Category.findOne({ categoryName: reqBody.categoryName })) {
-//     throw 'Category "' + reqBody.categoryName + '" is already taken';
-//   }
+  //   if (await Category.findOne({ categoryName: reqBody.categoryName })) {
+  //     throw 'Category "' + reqBody.categoryName + '" is already taken';
+  //   }
 
   const category = new Category();
 
@@ -66,9 +66,9 @@ async function updateCategory(reqBody) {
   if (!category) {
     throw "Category ID not found";
   }
-//   if (await Category.findOne({ categoryName: reqBody.newName })) {
-//     throw 'Category "' + reqBody.newName + '" is already taken';
-//   }
+  //   if (await Category.findOne({ categoryName: reqBody.newName })) {
+  //     throw 'Category "' + reqBody.newName + '" is already taken';
+  //   }
 
   const updatedObj = {
     categoryName: reqBody.newName,
@@ -80,14 +80,29 @@ async function updateCategory(reqBody) {
 }
 
 async function deleteCategory(id) {
-  if(!id) {
+  if (!id) {
     throw "categoryId field is required!";
   }
   const category = await Category.findById(id);
   if (!category) {
     throw "Category ID not found";
   }
+
+  const selected = await Category.findById(id);
+
   await Category.findByIdAndRemove(id);
 
-  await Category.find({parentId: id}).remove();
+  const siblings = await Category.find({ parentId: selected.parentId });
+
+  if (siblings.length === 0) {
+    const parent = await Category.findById(selected.parentId);
+    const updatedObj = {
+      hasChild: false,
+    };
+
+    Object.assign(parent, updatedObj);
+    await parent.save();
+  }
+
+  await Category.find({ parentId: id }).remove();
 }

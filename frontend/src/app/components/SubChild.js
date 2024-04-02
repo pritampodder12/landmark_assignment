@@ -60,13 +60,11 @@ export default function SubChild({ id, parentId, hasChild, categoryName }) {
           return setModal();
         }
         axios
-          .post(`${process.env.NEXT_PUBLIC_BE_URL}/categories/delete`, {
-            categoryId: id,
-          })
+          .delete(`${process.env.NEXT_PUBLIC_BE_URL}/categories/${id}`)
           .finally(() => {
             setLoading(false);
             setModal();
-            window.location.reload();
+            // window.location.reload();
           });
       }
     }

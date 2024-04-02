@@ -6,7 +6,7 @@ router.get("/getSubCategory/:parentId", getSubCategory);
 router.get("/getSubCategory", getSubCategory);
 router.post("/create", createCategory);
 router.post("/update", updateCategory);
-router.post("/delete", deleteCategory);
+router.delete("/:id", deleteCategory);
 
 module.exports = router;
 
@@ -44,7 +44,7 @@ function updateCategory(req, res, next) {
 
 function deleteCategory(req, res, next) {
   categoryService
-    .deleteCategory(req.body.categoryId)
+    .deleteCategory(req.params.id)
     .then(() => {
       return res.send({
         status: 200,
